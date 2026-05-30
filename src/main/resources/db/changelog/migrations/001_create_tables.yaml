@@ -1,0 +1,172 @@
+﻿databaseChangeLog:
+  - changeSet:
+      id: 001
+      author: Askar
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: full_name
+                  type: varchar(255)
+              - column:
+                  name: company_name
+                  type: varchar(255)
+              - column:
+                  name: logo
+                  type: varchar(255)
+              - column:
+                  name: account_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                  defaultValue: "ROLE_USER"
+              - column:
+                  name: enabled
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: true
+
+  - changeSet:
+      id: 002
+      author: Askar
+      changes:
+        - createTable:
+            tableName: flights
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: flight_number
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: departure_city
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: arrival_city
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: departure_time
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: arrival_time
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: company_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_flight_company
+                    references: users(id)
+
+  - changeSet:
+      id: 003
+      author: Askar
+      changes:
+        - createTable:
+            tableName: tickets
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: flight_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_ticket_flight
+                    references: flights(id)
+              - column:
+                  name: seat_class
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: decimal(10,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: seat_number
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_booked
+                  type: boolean
+                  constraints:
+                    nullable: false
+                  defaultValueBoolean: false
+
+  - changeSet:
+      id: 004
+      author: Askar
+      changes:
+        - createTable:
+            tableName: bookings
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_booking_user
+                    references: users(id)
+              - column:
+                  name: ticket_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    unique: true
+                    foreignKeyName: fk_booking_ticket
+                    references: tickets(id)
+              - column:
+                  name: booked_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
